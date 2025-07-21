@@ -124,7 +124,7 @@ Add to your MCP-compatible client configuration:
 
 Your AI agent can now process commands like:
 * `Extract https://anu-vue.netlify.app/guide/components/alert.html in beast mode & grab the "Outlined Alert Code snippets"`
-* `Give me code of Heartbeat EffectOutlined by scraping https://shadcnstudio.com/docs/components/button`
+* `Give me code of Heartbeat EffectOutlined by scraping https://shadcnstudio.com/docs/components/button using beast mode`
 
 ## 🧠 Intelligent Extraction Modes
 
