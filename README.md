@@ -151,13 +151,13 @@ Advanced interaction modeling for sophisticated web applications:
 
 ### Component Library Documentation
 ```bash
-# Extract code examples from MUI documentation
+# Extract code examples
 curl -X POST http://localhost:6000/scrape \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://mui.com/material-ui/react-button/",
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
     "mode": "beast",
-    "query": "give me contained button code snippets"
+    "query": "Outlined Alert Code snippets"
   }'
 ```
 
