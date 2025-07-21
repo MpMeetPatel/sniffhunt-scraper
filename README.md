@@ -123,9 +123,7 @@ Add to your MCP-compatible client configuration:
 ### Natural Language Commands
 
 Your AI agent can now process commands like:
-* `scrape https://docs.python.org/3/tutorial/ using beast mode`
-* `Extract component examples from https://mui.com/material-ui/ in normal mode`
-* `Parse https://reactjs.org/docs/ and grab "hooks documentation"`
+* `Extract https://anu-vue.netlify.app/guide/components/alert.html in beast mode & grab the "Outlined Alert Code snippets"`
 
 ## 🧠 Intelligent Extraction Modes
 
