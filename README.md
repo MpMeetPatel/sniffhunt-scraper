@@ -149,32 +149,6 @@ Advanced interaction modeling for sophisticated web applications:
 
 **Best For**: Admin dashboards, analytics tools, component libraries, configurators
 
-## 🧪 Production-Ready Examples
-
-### Developer Documentation Extraction
-```bash
-# Extract specific sections from Python documentation
-curl -X POST http://localhost:6000/scrape \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://docs.python.org/3/tutorial/",
-    "mode": "normal",
-    "query": "give me code snippets from functions and classes tutorial"
-  }'
-```
-
-### E-Commerce Product Information
-```bash
-# Extract specifications from product pages with tabs
-curl -X POST http://localhost:6000/scrape \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://www.apple.com/macbook-pro",
-    "mode": "beast",
-    "query": "give me technical specifications and pricing details"
-  }'
-```
-
 ### Component Library Documentation
 ```bash
 # Extract code examples from MUI documentation
