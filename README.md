@@ -272,6 +272,6 @@ We welcome contributions from the developer community:
 - **Personal Use:** Free
 - **Commercial Use:** ❌ (contact for licensing)
 - **Code redistribution/reselling:** ❌
-- **License** - see [LICENSE](./LICENSE) file for details.
+- **License** - see [LICENSE](https://github.com/MpMeetPatel/sniffhunt-scraper/blob/main/LICENCE) file for details.
 
 **Privacy & Compliance**: SniffHunt is a true privacy-first solution that runs entirely on your infrastructure, ensuring your data never leaves your control.
