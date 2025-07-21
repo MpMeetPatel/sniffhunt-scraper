@@ -157,7 +157,7 @@ curl -X POST http://localhost:6000/scrape \
   -d '{
     "url": "https://mui.com/material-ui/react-button/",
     "mode": "beast",
-    "query": "give me button variants with TypeScript examples"
+    "query": "give me contained button code snippets"
   }'
 ```
 
