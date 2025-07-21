@@ -151,8 +151,6 @@ Advanced interaction modeling for sophisticated web applications:
 
 **Best For**: Admin dashboards, analytics tools, component libraries, configurators
 
----
-
 ## 🧪 Production-Ready Examples
 
 ### Developer Documentation Extraction
@@ -198,7 +196,7 @@ curl -X POST http://localhost:6000/scrape \
 **Request Body:**
 ```json
 {
-  "url": "https://example.com" // (required)
+  "url": "https://example.com", // (required)
   "mode": "normal" | "beast", // Default: normal, use beast for complex interfaces
   "query": "natural language content description" // (optional but good to have)
 }
