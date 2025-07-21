@@ -15,7 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const DEFAULT_BASE_URL = 'http://localhost:6000';
-const SCRAPING_TIMEOUT = 300000; // 5 minutes
 
 // Keywords that should trigger this MCP server
 const SCRAPING_KEYWORDS = [
@@ -201,140 +200,35 @@ class SniffHuntScraperMCPServer {
     const validatedArgs = ScrapeRequestSchema.parse(args);
     const { url, query, mode, baseUrl } = validatedArgs;
 
-    const progressUpdates = [];
-    let finalResult = null;
-
-    // Enhanced progress tracking with timestamps and details
-    const addProgressUpdate = (message, type = 'progress', details = null) => {
-      const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
-      const emoji = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'info' ? 'ℹ️' : '⚡';
-
-      let progressEntry = `${emoji} **${timestamp}** - ${message}`;
-      if (details) {
-        progressEntry += `\n   ${details}`;
-      }
-
-      progressUpdates.push(progressEntry);
-
-      // Log to console for immediate feedback during development
-      console.log(`[MCP] ${emoji} ${message}${details ? ` (${details})` : ''}`);
-    };
-
     try {
-      addProgressUpdate('Connecting to scraping service...', 'info');
+      console.log(`[MCP] 🚀 Starting scrape for ${url} in ${mode} mode`);
 
-      // Use fetch with streaming response
-      const response = await fetch(`${baseUrl}/scrape`, {
+      // Use fetch with JSON response (not streaming)
+      const response = await fetch(`${baseUrl}/scrape-sync`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'text/event-stream',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({ url, query, mode }),
       });
-
-      addProgressUpdate('Connected to scraping service, starting process...', 'info');
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      // Set up timeout
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
-          reject(new Error('Scraping timeout'));
-        }, SCRAPING_TIMEOUT);
-      });
+      // Parse the JSON response
+      const result = await response.json();
 
-      // Process the streaming response using async iteration
-      let buffer = '';
+      // Handle the response based on the /scrape-sync endpoint format
+      if (result.success && result.data?.markdown) {
+        const contentLength = result.data.markdown.length;
+        const processingTime = result.data.metadata?.processingTime || 0;
 
-      const streamingPromise = (async () => {
-        // Use async iteration over the response body
-        for await (const chunk of response.body) {
-          buffer += chunk.toString();
-
-          // Process complete SSE messages
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || ''; // Keep incomplete line in buffer
-
-          for (const line of lines) {
-            if (line.trim() === '') continue;
-
-            try {
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6);
-                if (data === '[DONE]') {
-                  addProgressUpdate('Scraping process completed', 'success');
-                  break;
-                }
-
-                const parsed = JSON.parse(data);
-
-                if (parsed.type === 'progress') {
-                  addProgressUpdate(parsed.message, 'progress', parsed.details);
-                } else if (parsed.type === 'completed') {
-                  // Handle the 'completed' response type from the server
-                  finalResult = parsed;
-                  if (parsed.result?.success && parsed.result?.data?.markdown) {
-                    addProgressUpdate('Final result received', 'success', `Content: ${parsed.result.data.markdown.length} chars`);
-                  } else {
-                    addProgressUpdate('Scraping completed but no content extracted', 'error', parsed.result?.error || 'Unknown error');
-                  }
-                } else if (parsed.type === 'result') {
-                  // Legacy support for 'result' type
-                  finalResult = parsed;
-                  addProgressUpdate('Final result received', 'success', `Content: ${finalResult.data?.markdown?.length || 0} chars`);
-                } else if (parsed.type === 'error') {
-                  addProgressUpdate(parsed.message, 'error', parsed.details);
-                  break;
-                } else if (parsed.type === 'done') {
-                  addProgressUpdate('Scraping process completed', 'success');
-                  break;
-                }
-              }
-            } catch (parseError) {
-              addProgressUpdate(`Parse error: ${parseError.message}`, 'error');
-            }
-          }
-        }
-      })();
-
-      // Race between streaming and timeout
-      await Promise.race([streamingPromise, timeoutPromise]);
-
-      // Create progress timeline
-      const progressTimeline = progressUpdates.join('\n');
-      const totalSteps = progressUpdates.length;
-      const successSteps = progressUpdates.filter(update => update.includes('✅')).length;
-      const errorSteps = progressUpdates.filter(update => update.includes('❌')).length;
-
-      // Check if we have any successful result data
-      let resultData = null;
-      let success = false;
-
-      if (finalResult) {
-        // Handle 'completed' response type
-        if (finalResult.type === 'completed' && finalResult.result) {
-          resultData = finalResult.result.data;
-          success = finalResult.result.success;
-        }
-        // Handle legacy 'result' type
-        else if (finalResult.data) {
-          resultData = finalResult.data;
-          success = finalResult.success;
-        }
-      }
-
-      if (success && resultData?.markdown) {
-        const processingTime = resultData.metadata?.processingTime || 0;
-        const contentLength = resultData.markdown.length;
-
-        // Log the summary for debugging but return only the raw markdown content
+        // Log the summary for debugging
         console.log(`[MCP] ✅ Scraping completed successfully:
 - Content Length: ${contentLength.toLocaleString()} characters
 - Processing Time: ${Math.round(processingTime / 1000)}s
-- Total Steps: ${totalSteps} (${successSteps} successful, ${errorSteps} errors)
 - Mode: ${mode}
 - Query: ${query || 'None'}`);
 
@@ -343,18 +237,19 @@ class SniffHuntScraperMCPServer {
           content: [
             {
               type: 'text',
-              text: resultData.markdown,
+              text: result.data.markdown,
             },
           ],
         };
       } else {
-        // Handle failure case with detailed progress
-        const errorMessage = finalResult?.result?.error || finalResult?.error || 'No data was extracted';
-        throw new Error(`Scraping failed. ## Progress Log\n${progressTimeline}\n\n**Final Error:** ${errorMessage}`);
+        // Handle failure case
+        const errorMessage = result.error || result.enhancedError || 'No data was extracted';
+        throw new Error(`Scraping failed: ${errorMessage}`);
       }
 
     } catch (error) {
-      throw new Error(`Failed to start streaming scrape: ${error.message}`);
+      console.error(`[MCP] ❌ Scraping error: ${error.message}`);
+      throw new Error(`Failed to scrape: ${error.message}`);
     }
   }
 

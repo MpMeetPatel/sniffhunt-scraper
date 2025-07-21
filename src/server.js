@@ -191,6 +191,57 @@ app.post('/scrape', async c => {
   }
 });
 
+// New synchronous scraping endpoint for MCP
+app.post('/scrape-sync', async c => {
+  try {
+    // Validate request body
+    const body = await c.req.json();
+    const validatedData = ScrapeRequestSchema.parse(body);
+
+    const { url, output, query, mode } = validatedData;
+
+    // Execute scraping synchronously (no streaming)
+    const scrapingResult = await scrapeWithStreaming(
+      url,
+      output,
+      query,
+      mode,
+      null // No progress callback for sync mode
+    );
+
+    // Return simple JSON response
+    if (scrapingResult && scrapingResult.success) {
+      return c.json({
+        success: true,
+        data: {
+          markdown: scrapingResult.markdown,
+          html: scrapingResult.html,
+          metadata: {
+            url: url,
+            query: query,
+            mode: mode,
+            processingTime: scrapingResult.processingTime,
+            contentLength: scrapingResult.markdown?.length || 0,
+          },
+        },
+      });
+    } else {
+      return c.json({
+        success: false,
+        error: scrapingResult?.error || 'Scraping failed',
+        enhancedError: scrapingResult?.enhancedError || null,
+      }, 500);
+    }
+  } catch (error) {
+    console.error('Sync scraping error:', error);
+    return c.json({
+      success: false,
+      error: error.message,
+      details: error.errors || error.message,
+    }, 400);
+  }
+});
+
 // Error handling middleware
 app.onError((err, c) => {
   console.error('Application error:', err);
@@ -218,6 +269,7 @@ app.notFound(c => {
           'GET /',
           'GET /health',
           'POST /scrape',
+          'POST /scrape-sync',
         ],
         timestamp: new Date().toISOString(),
       },
