@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "start": "nodemon src/server.js -V",
-    "cli": "nodemon src/cli.js",
+    "cli": "node src/cli.js",
     "help-cli": "node src/cli.js --help",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -36,7 +36,11 @@
     "postinstall": "npx -y playwright-core install --with-deps --only-shell chromium"
   },
   "nodemonConfig": {
-    "ignore": ["**/node_modules/**", "**/langfuse/**", "keys-manager.json"],
+    "ignore": [
+      "**/node_modules/**",
+      "**/langfuse/**",
+      "keys-manager.json"
+    ],
     "delay": 500
   },
   "dependencies": {

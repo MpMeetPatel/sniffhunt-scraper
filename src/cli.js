@@ -1,62 +1,57 @@
 #!/usr/bin/env node
 
 /**
- * Main entry point for the Context Scraper application
- * Provides unified access to CLI, server, and programmatic usage
+ * Command Line Interface for the SniffHunt Scraper
+ * Provides CLI access to web scraping functionality
  */
 
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readFileSync } from 'fs';
+import { scrape, SCRAPING_MODES } from './WebScraper.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Read package.json for version info
 const packagePath = join(__dirname, '..', 'package.json');
 const packageInfo = JSON.parse(readFileSync(packagePath, 'utf8'));
 
-// Help text for the main entry point
-const MAIN_HELP_TEXT = `
+const CLI_HELP_TEXT = `
 ${packageInfo.name} v${packageInfo.version}
 ${packageInfo.description}
 
 🌟 World's Best Opensource AI Scraper & URL to Markdown Converter 🌟
 
 Usage:
-  node src/index.js <command> [options]
-  npm start <command> [options]
+  node src/cli.js <url> [options]
+  pnpm cli <url> [options]
 
-Commands:
-  cli <url> [options]     Run the CLI scraper (default command)
-  server [options]        Start the HTTP API server
-  help                    Show this help message
-
-CLI Options (when using 'cli' command or direct URL):
+Options:
   -o, --output <file>     Output filename (default: scraped)
   -q, --query <text>      Optional user query for focused content extraction
   -m, --mode <mode>       Scraping mode: normal or beast (default: beast)
-  -h, --help             Show CLI help
+  -h, --help             Show this help message
 
-Server Options (when using 'server' command):
-  -p, --port <port>       Server port (default: 6000)
-  -h, --host <host>       Server host (default: 0.0.0.0)
+Scraping Modes:
+  normal                  Fast AI-powered extraction with dynamic content handling
+  beast                   Human-like browser automation for interactive elements
 
 Examples:
-  # CLI Usage (direct URL - default command)
-  node src/index.js https://example.com
-  node src/index.js https://example.com -o output -q "Find pricing" -m beast
+  # Basic scraping
+  node src/cli.js https://example.com
+  pnpm cli https://example.com
   
-  # Explicit CLI command
-  node src/index.js cli https://example.com -o custom-output
+  # Custom output filename
+  node src/cli.js https://example.com -o my-output
   
-  # Start HTTP server
-  node src/index.js server
-  node src/index.js server -p 8080
+  # With user query for focused extraction
+  node src/cli.js https://docs.example.com -q "API documentation"
   
-  # Using npm scripts
-  npm start https://example.com -- -o output
-  npm run server
+  # Using normal mode
+  node src/cli.js https://example.com -m normal
+  
+  # Complete example
+  node src/cli.js https://example.com -o pricing -q "Find pricing information" -m beast
 
 Features:
   🚀 Two Scraping Modes:
@@ -75,78 +70,128 @@ Features:
      • Query-focused content extraction
      • Intelligent content combination
      • Markdown optimization
-  
-  📡 Multiple Interfaces:
-     • Command Line Interface (CLI)
-     • HTTP API Server with streaming
-     • Model Context Protocol (MCP) server
-     • Programmatic JavaScript API
 
 For detailed documentation, visit: https://github.com/mpmeetpatel/sniffhunt-scraper
 `;
 
-// Parse command line arguments
-function parseMainArgs() {
+/**
+ * Parse command line arguments
+ * @returns {Object} Parsed arguments
+ */
+function parseCliArgs() {
   const args = process.argv.slice(2);
-  
+
   if (args.length === 0) {
-    return { command: 'help' };
+    return { showHelp: true };
   }
-  
-  const firstArg = args[0];
-  
-  // Check for help
-  if (firstArg === 'help' || firstArg === '-h' || firstArg === '--help') {
-    return { command: 'help' };
+
+  const result = {
+    url: null,
+    output: 'scraped',
+    query: '',
+    mode: 'beast',
+    showHelp: false,
+  };
+
+  let i = 0;
+  while (i < args.length) {
+    const arg = args[i];
+
+    if (arg === '-h' || arg === '--help') {
+      result.showHelp = true;
+      return result;
+    } else if (arg === '-o' || arg === '--output') {
+      if (i + 1 < args.length) {
+        result.output = args[i + 1];
+        i += 2;
+      } else {
+        throw new Error(`Missing value for ${arg}`);
+      }
+    } else if (arg === '-q' || arg === '--query') {
+      if (i + 1 < args.length) {
+        result.query = args[i + 1];
+        i += 2;
+      } else {
+        throw new Error(`Missing value for ${arg}`);
+      }
+    } else if (arg === '-m' || arg === '--mode') {
+      if (i + 1 < args.length) {
+        const mode = args[i + 1].toLowerCase();
+        if (mode !== 'normal' && mode !== 'beast') {
+          throw new Error(`Invalid mode: ${mode}. Must be 'normal' or 'beast'`);
+        }
+        result.mode = mode;
+        i += 2;
+      } else {
+        throw new Error(`Missing value for ${arg}`);
+      }
+    } else if (arg.startsWith('-')) {
+      throw new Error(`Unknown option: ${arg}`);
+    } else if (!result.url) {
+      // First non-option argument is the URL
+      result.url = arg;
+      i++;
+    } else {
+      throw new Error(`Unexpected argument: ${arg}`);
+    }
   }
-  
-  // Check for explicit commands
-  if (firstArg === 'cli') {
-    return { command: 'cli', args: args.slice(1) };
+
+  if (!result.url && !result.showHelp) {
+    throw new Error('URL is required');
   }
-  
-  if (firstArg === 'server') {
-    return { command: 'server', args: args.slice(1) };
-  }
-  
-  // If first argument looks like a URL, treat as CLI command
-  if (firstArg.startsWith('http://') || firstArg.startsWith('https://')) {
-    return { command: 'cli', args: args };
-  }
-  
-  // Default to help for unrecognized commands
-  return { command: 'help' };
+
+  return result;
 }
 
-// Main function
-async function main() {
-  const { command, args = [] } = parseMainArgs();
-  
+/**
+ * Main CLI function
+ */
+async function runCli() {
   try {
-    if (command === 'help') {
-      console.log(MAIN_HELP_TEXT);
+    const args = parseCliArgs();
+
+    if (args.showHelp) {
+      console.log(CLI_HELP_TEXT);
       process.exit(0);
-    } else if (command === 'cli') {
-      // Import and run CLI
-      // Set process.argv to simulate direct CLI call
-      process.argv = ['node', 'src/cli.js', ...args];
-      await import('./cli.js');
-    } else if (command === 'server') {
-      // Import and run server
-      console.log('🚀 Starting Context Scraper HTTP API Server...');
-      await import('./server.js');
+    }
+
+    try {
+      new URL(args.url);
+      // eslint-disable-next-line no-unused-vars
+    } catch (_) {
+      console.error(`❌ Invalid URL: ${args.url}`);
+      process.exit(1);
+    }
+
+    console.log(`🚀 Starting SniffHunt Scraper...`);
+    console.log(`📡 URL: ${args.url}`);
+    console.log(`📁 Output: ${args.output}`);
+    console.log(`🤖 Mode: ${args.mode}`);
+    if (args.query) {
+      console.log(`🔍 Query: ${args.query}`);
+    }
+    console.log('');
+
+    const mode =
+      args.mode === 'normal' ? SCRAPING_MODES.NORMAL : SCRAPING_MODES.BEAST;
+
+    const success = await scrape(args.url, args.output, args.query, mode);
+
+    if (success) {
+      console.log(`\n✅ Scraping completed successfully!`);
+      console.log(`📁 Files saved with prefix: ${args.output}`);
+      process.exit(0);
     } else {
-      console.error(`Unknown command: ${command}`);
-      console.log('\nUse "help" command for usage information');
+      console.log(`\n❌ Scraping failed. Check the logs above for details.`);
       process.exit(1);
     }
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error(`❌ Error: ${error.message}`);
+    console.log('\nUse --help for usage information');
     process.exit(1);
   }
 }
 
-// Handle uncaught errors
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
@@ -157,10 +202,8 @@ process.on('uncaughtException', error => {
   process.exit(1);
 });
 
-// Export for programmatic usage
-export { main };
+export { runCli };
 
-// Run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+  runCli();
 }
