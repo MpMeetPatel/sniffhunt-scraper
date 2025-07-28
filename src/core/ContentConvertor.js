@@ -1,6 +1,5 @@
 import { unified } from 'unified';
 import rehypeParse from 'rehype-parse';
-import rehypeSanitize from 'rehype-sanitize';
 import rehypeFormat from 'rehype-format';
 import rehypeStringify from 'rehype-stringify';
 import rehypeRemark from 'rehype-remark';
@@ -41,7 +40,6 @@ export async function convertToMarkdown(htmlContent) {
 export async function fixAndFormatHTML(htmlContent) {
   const htmlProcessor = await unified()
     .use(rehypeParse, { fragment: false })
-    .use(rehypeSanitize)
     .use(rehypeFormat)
     .use(rehypeStringify)
     .process(htmlContent);

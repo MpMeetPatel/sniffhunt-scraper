@@ -1,6 +1,5 @@
 /**
  * Handle iframes by extracting their content and replacing them in the main page
- * This ensures iframe content is included in the final extracted content
  * @param {Object} page - Playwright page object
  */
 export async function handleIframes(page) {
@@ -13,50 +12,74 @@ export async function handleIframes(page) {
       const iframeElement = await frame.frameElement();
       if (!iframeElement) continue;
 
-      // Get iframe source information
-      const iframeSrc = await iframeElement.evaluate(
-        iframe => iframe.src || iframe.getAttribute('srcdoc') || 'inline'
-      );
+      const iframeInfo = await iframeElement.evaluate(iframe => {
+        const src = iframe.src;
+        const srcdoc = iframe.getAttribute('srcdoc');
+
+        if (src) {
+          return { type: 'src', url: src, content: null };
+        } else if (srcdoc) {
+          return { type: 'srcdoc', url: 'inline-srcdoc', content: srcdoc };
+        } else {
+          return { type: 'inline', url: 'inline', content: null };
+        }
+      });
 
       try {
-        await frame.waitForLoadState('domcontentloaded', { timeout: 5000 });
+        await frame.waitForLoadState('domcontentloaded', { timeout: 2000 });
       } catch (timeoutError) {
         console.warn(
-          `Iframe load timeout for: ${iframeSrc}, proceeding anyway...`,
+          `Iframe load timeout for: ${iframeInfo.url}, proceeding anyway...`,
           timeoutError.message
         );
       }
 
-      // Extract raw HTML content from iframe without any filtering
       const frameContent = await frame.evaluate(() => {
-        // Return the complete raw HTML content
-        return document.documentElement.outerHTML;
-      }, {});
+        const main = document.querySelector('main');
+        const body = document.body;
 
-      // Only replace if we got meaningful content
+        if (main && main.innerHTML.trim()) {
+          return main.innerHTML;
+        }
+
+        if (body) {
+          const bodyClone = body.cloneNode(true);
+          bodyClone
+            .querySelectorAll('script, style, head')
+            .forEach(el => el.remove());
+          const content = bodyClone.innerHTML.trim();
+          if (content) {
+            return content;
+          }
+        }
+
+        const allText = document.body ? document.body.innerText : '';
+        if (allText.trim()) {
+          return `<p>${allText.trim()}</p>`;
+        }
+
+        return '';
+      });
+
       if (frameContent && frameContent.trim().length > 0) {
-        // Replace iframe with extracted content
         await iframeElement.evaluate(
           (iframe, config) => {
             const container = document.createElement('div');
             container.className = 'iframe-content-replacement';
             container.setAttribute(
               'data-original-iframe-src',
-              config.iframeSrc || ''
+              config.iframeUrl || ''
             );
-            container.innerHTML = config.content;
+            container.innerHTML = config.content || '';
             iframe.parentNode.replaceChild(container, iframe);
           },
-          { content: frameContent, iframeSrc }
+          { content: frameContent, iframeUrl: iframeInfo.url }
         );
-      } else {
-        console.log(`No content found in iframe: ${iframeSrc}`);
       }
     } catch (e) {
       const frameUrl = frame.url();
       console.log(`❌ Cannot access iframe (${frameUrl}): ${e.message}`);
 
-      // Log specific error types for better debugging
       if (e.message.includes('cross-origin')) {
         console.log('   → Cross-origin restriction detected');
       } else if (e.message.includes('timeout')) {
