@@ -9,6 +9,10 @@
 
 🔍 Transform any web interface SPAs, dynamic dashboards, or complex content layers into semantically structured, LLM-optimized Markdown with human-level intelligence. **Outperforms FireCrawl, Jina Reader, and other paid solutions while running entirely on your local machine.**
 
+<a href="https://peerlist.io/meetpatel/project/sniffhunt-scraper">
+  <img align="center" src="./assets/peerlist-upvote.jpeg" alt="peerlist-screenshot" width="500" />
+</a>
+
 ### 🏆 Superior to Paid Alternatives
 | Feature | SniffHunt | FireCrawl (/extract) | Jina Reader | Others |
 |---------|-----------|-----------|-------------|---------|
@@ -259,12 +263,14 @@ We welcome contributions from the developer community:
 
 ### Show Your Support
 * ⭐ **Star the Repository**: [GitHub](https://github.com/mpmeetpatel/sniffhunt-scraper)
-* 🔼 Upvote on producthunt: 
+* 🔼 Upvote on peerlist: 
   
-  <a href="https://www.producthunt.com/products/sniffhunt?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-sniffhunt" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=995465&theme=light&t=1753080894843" alt="SniffHunt - Advanced&#0032;AI&#0045;driven&#0032;URL&#0045;to&#0045;Markdown&#0032;converter | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+  <a href="https://peerlist.io/meetpatel/project/sniffhunt-scraper">
+    <img src="./assets/peerlist-upvote.jpeg" alt="peerlist-screenshot" width="200" />
+  </a>
 * ☕ **Support Development**: [Buy Me Coffee](https://coff.ee/mpmeetpatel)
 
-  <img src="./buymecoffe.png" alt="Buy Me Coffee" width="200">
+  <img src="./assets/buymecoffe.png" alt="Buy Me Coffee" width="200">
 
 
 ## 📄 License & Legal
