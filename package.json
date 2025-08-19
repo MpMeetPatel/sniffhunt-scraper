@@ -28,8 +28,6 @@
   },
   "packageManager": "bun@1.2.15",
   "dependencies": {
-    "@types/mdx": "^2.0.13",
-    "fumadocs-core": "^15.6.12",
-    "fumadocs-mdx": "^11.7.5"
+    "@types/mdx": "^2.0.13"
   }
 }
