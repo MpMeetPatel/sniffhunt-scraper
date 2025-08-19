@@ -1,0 +1,54 @@
+{
+  "name": "sniffhunt-scraper-mcp-server",
+  "version": "1.0.0",
+  "description": "Advanced Model Context Protocol server for web scraping, content extraction, data harvesting, and website content mining with SniffHunt scraper",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "sniffhunt-scraper-mcp-server": "dist/index.js"
+  },
+  "engines": {
+    "bun": ">=1.2.15"
+  },
+  "scripts": {
+    "build": "bun build src/index.js --target bun --format esm --outfile dist/index.js --external playwright-core",
+    "dev": "bun --watch src/index.js",
+    "setup": "bun setup.js"
+  },
+  "keywords": [
+    "mcp",
+    "web-scraper",
+    "scraping",
+    "content-extraction",
+    "data-harvesting",
+    "website-extraction",
+    "content-grabbing",
+    "data-mining",
+    "web-crawling",
+    "html-extraction",
+    "content-collection",
+    "website-data",
+    "sniffhunt",
+    "model-context-protocol",
+    "extract",
+    "scrape",
+    "grab",
+    "fetch",
+    "pull",
+    "harvest",
+    "mine",
+    "collect",
+    "gather",
+    "retrieve"
+  ],
+  "author": "SniffHunt Team",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.3",
+    "dotenv": "^17.2.1",
+    "playwright-core": "^1.54.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0"
+  }
+}

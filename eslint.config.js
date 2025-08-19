@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    files: ['**/*.test.js', '**/*.spec.js', 'test-*.js'],
+    files: ['**/*.test.js', 'test-*.js'],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -48,7 +48,13 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**', 'langfuse/**'],
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'apps/keys-manager.json',
+      '**/*.scraped.*',
+    ],
   },
   // Prettier config should be last to override any conflicting rules
   prettierConfig,

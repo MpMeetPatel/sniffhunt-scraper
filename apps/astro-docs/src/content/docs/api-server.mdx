@@ -1,0 +1,228 @@
+---
+title: API Server
+description: Hono-based API server with streaming and sync endpoints
+icon: Server
+---
+
+### 📝 Prerequisites
+
+Before starting the server, ensure you have:
+
+1. **Environment Setup**: A `.env` file in the root directory with your Google Gemini API key
+2. **Dependencies Installed**: Run `bun install` from the root directory
+
+:::tip[First Time Setup]
+If this is your first time, follow our [Quick Start Guide](/quick-start) for complete setup instructions.
+:::
+
+### 🟢 Starting the Server
+
+##### From Root (Recommended)
+
+```bash
+# Start from root directory (automatically loads .env)
+bun run dev:server
+```
+
+**Benefits:**
+
+- Automatically loads environment variables from root `.env`
+- Consistent with other workspace commands
+- No need to navigate to subdirectories
+
+##### Individual App Alternative
+
+```bash
+# Alternative: Start from server directory
+cd apps/server
+bun dev
+```
+
+**Note:** This approach also loads the root `.env` file automatically due to the server's configuration.
+
+The server will start on `http://localhost:8080` by default.
+
+##### Verify Server is Running
+
+```bash
+# Health check
+curl http://localhost:8080/health
+
+# Expected response:
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0",
+  "timestamp": "xxxxx"
+}
+```
+
+### 📡 API Reference
+
+#### Health Check Endpoints
+
+##### `GET /` & `GET /health`
+
+Returns API health status and configuration validation.
+
+**Response:**
+
+```json
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0",
+  "timestamp": "xxxxx"
+}
+```
+
+#### Content Extraction Endpoints
+
+##### `POST /scrape` - Streaming Content Extraction
+
+Real-time streaming extraction with progress updates.
+
+**Request Body:**
+
+```json
+{
+  "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+  "mode": "normal" | "beast",
+  "query": "natural language content description"
+}
+```
+
+**Example:**
+
+```bash
+curl -N http://localhost:8080/scrape \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://anu-vue.netlify.app/guide/components/alert.html", "mode": "beast"}'
+```
+
+**Response:** Server-Sent Events (SSE) stream with real-time updates.
+
+##### `POST /scrape-sync` - Synchronous Content Extraction
+
+Standard synchronous extraction for simple integrations.
+
+**Request Body:**
+
+```json
+{
+  "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+  "mode": "normal" | "beast",
+  "query": "natural language content description"
+}
+```
+
+**Parameters:**
+
+- `url` (required): Target URL for content extraction
+- `mode` (optional): Extraction strategy
+  - `normal`: Standard content extraction (default)
+  - `beast`: Interactive interface handling with AI intelligence
+- `query` (optional): Natural language description for semantic filtering
+
+**Response Format:**
+
+```json
+{
+  "success": true,
+  "content": "# Extracted Content\n\nMarkdown-formatted content here...",
+  "metadata": {
+    "title": "Page Title",
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "beast",
+    "extractionTime": 3.2,
+    "contentLength": 15420
+  }
+}
+```
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "normal",
+    "query": "pricing information"
+  }'
+```
+
+### 🎛️ Configuration
+
+#### Environment Variables
+
+The server loads configuration from the root `.env` file:
+
+```bash
+# Required
+GOOGLE_GEMINI_KEY=your_gemini_api_key_here
+
+# Server Configuration
+PORT=8080                 # Server port
+CORS_ORIGIN=*             # CORS allowed origins
+
+# Scraping Configuration
+MAX_RETRY_COUNT=2         # Maximum retry attempts
+RETRY_DELAY=1000          # Delay between retries (ms)
+PAGE_TIMEOUT=10000        # Page load timeout (ms)
+```
+
+#### CORS Configuration
+
+The server supports configurable CORS settings:
+
+```bash
+# Allow all origins
+CORS_ORIGIN=*
+```
+
+### 📊 Scraping Modes
+
+#### Normal Mode
+
+- **Best for**: Static content, blogs, documentation
+- **Performance**: Fast extraction
+- **Capabilities**: Basic content extraction (still better than paid services even in normal mode)
+
+#### Beast Mode
+
+- **Best for**: SPAs, dynamic dashboards, interactive interfaces
+- **Performance**: Intelligent extraction with AI processing
+- **Capabilities**:
+  - UI interaction (clicks, scrolls, navigation)
+  - Modal and popup handling
+  - Dynamic content loading
+  - Semantic content understanding
+
+:::tip[Mode Selection]
+Use `normal` mode for standard websites and `beast` mode for complex web applications that require interaction or have dynamic content runtime content.
+:::
+
+##### Semantic Content Filtering Examples
+
+Use the `query` parameter to extract specific content like this:
+
+```bash
+# Extract Avatar Code snippets
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/avatar.html",
+    "mode": "beast",
+    "query": "Grab the 'Avatar Code snippets'"
+  }'
+
+# Extract API reference and code examples
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "normal",
+    "query": "Grab API reference and code examples"
+  }'
+```

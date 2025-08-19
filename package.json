@@ -1,72 +1,35 @@
 {
-  "name": "sniffhunt-scraper",
-  "version": "1.0.0",
-  "description": "SniffHunt Scraper - A comprehensive webpage scraper or URL to LLM-ready markdown content extraction tool build with AI & Playwright automations",
-  "main": "src/server.js",
-  "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mpmeetpatel/sniffhunt-scraper.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mpmeetpatel/sniffhunt-scraper/issues"
-  },
-  "homepage": "https://github.com/mpmeetpatel/sniffhunt-scraper#readme",
-  "author": "Meet K Patel",
-  "keywords": [
-    "web-scraper",
-    "ai",
-    "playwright",
-    "markdown",
-    "content-extraction",
-    "automation",
-    "LLM-ready markdown"
+  "name": "sniffhunt-scraper-workspace",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
+  "type": "module",
   "scripts": {
-    "start": "nodemon src/server.js -V",
-    "cli": "node src/cli.js",
-    "help-cli": "node src/cli.js --help",
+    "check-types": "bun run --filter 'apps/*' check-types",
+    "dev:web": "cd apps/web && bun dev",
+    "dev:docs": "cd apps/astro-docs && bun dev",
+    "dev:server": "cd apps/server && bun --watch src/index.ts",
+    "cli:scraper": "cd apps/scraper && bun cli.js",
+    "setup:mcp": "cd apps/mcp && bun run setup",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "npx -y playwright-core install --with-deps --only-shell chromium"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "**/node_modules/**",
-      "**/langfuse/**",
-      "keys-manager.json"
-    ],
-    "delay": 500
-  },
-  "dependencies": {
-    "@ai-sdk/google": "^1.2.22",
-    "@hono/node-server": "^1.17.0",
-    "ai": "^4.3.19",
-    "dotenv": "^17.2.0",
-    "hono": "^4.8.5",
-    "playwright-core": "^1.54.1",
-    "rehype-format": "^5.0.1",
-    "rehype-highlight": "^7.0.2",
-    "rehype-parse": "^9.0.1",
-    "rehype-remark": "^10.0.1",
-    "rehype-sanitize": "^6.0.0",
-    "rehype-stringify": "^10.0.1",
-    "remark-gfm": "^4.0.1",
-    "remark-stringify": "^11.0.0",
-    "unified": "^11.0.5",
-    "zod": "^3.24.4"
+    "postinstall": "bunx playwright-core install --with-deps --only-shell chromium"
   },
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
-    "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.8",
-    "globals": "^16.3.0",
-    "nodemon": "^3.1.10",
-    "prettier": "^3.6.2"
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0"
+  },
+  "packageManager": "bun@1.2.15",
+  "dependencies": {
+    "@types/mdx": "^2.0.13",
+    "fumadocs-core": "^15.6.12",
+    "fumadocs-mdx": "^11.7.5"
   }
 }
