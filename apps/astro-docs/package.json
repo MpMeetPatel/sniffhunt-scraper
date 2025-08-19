@@ -1,0 +1,21 @@
+{
+  "name": "astro-docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "bun run build && netlify deploy --prod"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^6.5.7",
+    "@astrojs/starlight": "^0.35.2",
+    "@astrojs/starlight-tailwind": "^4.0.1",
+    "add": "^2.0.6",
+    "astro": "^5.13.2",
+    "sharp": "^0.34.2",
+    "tailwind": "^4.0.0"
+  }
+}

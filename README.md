@@ -1,4 +1,3 @@
-
 <div align="center">
 
 # 🚀 SniffHunt Scraper
@@ -9,250 +8,842 @@
 
 🔍 Transform any web interface SPAs, dynamic dashboards, or complex content layers into semantically structured, LLM-optimized Markdown with human-level intelligence. **Outperforms FireCrawl, Jina Reader, and other paid solutions while running entirely on your local machine.**
 
+🌟 **Modern Bun-powered workspace with comprehensive scraper, Hono API server, and MCP integration** 🌟
+
 <a href="https://peerlist.io/meetpatel/project/sniffhunt-scraper">
   <img align="center" src="./assets/peerlist-upvote.jpeg" alt="peerlist-screenshot" width="500" />
 </a>
 
-### 🏆 Superior to Paid Alternatives
-| Feature | SniffHunt | FireCrawl (/extract) | Jina Reader | Others |
-|---------|-----------|-----------|-------------|---------|
-| **Cost** | 🆓 Free & Open Source | 💰 $99-799/month | 💰 usage-based | 💰 $50-1000/month |
-| **Privacy** | 🔒 100% Local | ☁️ Cloud-based | ☁️ Cloud-based | ☁️ Cloud-based |
-| **AI Intelligence** | 🧠 Cognitive DOM modeling | ⚡ Basic extraction | 📄 Text-only | 📄 Limited |
-| **Interactive Content** | ✅ Full UI interaction | ❌ Static only | ❌ Static only | ❌ Limited |
-| **LLM Optimization** | 🎯 Purpose-built | 📝 Generic output | 📝 Generic output | 📝 Basic |
+<br />
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/mpmeetpatel/sniffhunt-scraper)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Bun](https://img.shields.io/badge/bun-%3E%3D1.20.0-orange.svg)](https://bun.sh/)
 
 </div>
 
-> ⚠️ **Market Reality**: While FireCrawl and Jina Reader charge premium prices for basic text extraction, SniffHunt delivers enterprise-grade AI intelligence completely free. Join thousands of developers who've eliminated expensive SaaS subscriptions. 💡🔁💬
+## Table of Contents
 
-## 🔥 Why SniffHunt Outperforms Paid Solutions
+- [Why SniffHunt?](#why-sniffhunt)
+- [Key Features](#key-features)
+- [Quick Start Guide](#quick-start-guide)
+- [Integration Methods](#integration-methods)
+  - [MCP Integration](#mcp-integration)
+  - [API Server](#api-server)
+  - [Web Interface](#web-interface)
+  - [CLI Scraper](#cli-scraper)
+- [Use Cases](#use-cases)
+- [Community & Support](#community--support)
 
-**The Problem with Current Tools**: FireCrawl, Jina Reader, and similar services charge hundreds per month for basic HTML-to-text conversion that breaks on modern web applications. They process your sensitive data on external servers while delivering inferior results.
+## Why SniffHunt?
 
-**The SniffHunt Advantage**: Purpose-built for the LLM era with cognitive intelligence that understands web interfaces like a human developer. Zero recurring costs, complete privacy, superior extraction quality.
+### 🏆 Superior to Paid Alternatives
 
-### 🎯 Competitive Advantages Over Paid Tools
+| Feature                 | SniffHunt                 | FireCrawl (/extract) | Jina Reader       | Others            |
+| ----------------------- | ------------------------- | -------------------- | ----------------- | ----------------- |
+| **Cost**                | 🆓 Free & Open Source     | 💰 $99-799/month     | 💰 usage-based    | 💰 $50-1000/month |
+| **Privacy**             | 🔒 100% Local             | ☁️ Cloud-based       | ☁️ Cloud-based    | ☁️ Cloud-based    |
+| **AI Intelligence**     | 🧠 Cognitive DOM modeling | ⚡ Basic extraction  | 📄 Text-only      | 📄 Limited        |
+| **Interactive Content** | ✅ Full UI interaction    | ❌ Static only       | ❌ Static only    | ❌ Limited        |
+| **LLM Optimization**    | 🎯 Purpose-built          | 📝 Generic output    | 📝 Generic output | 📝 Basic          |
 
-* 🧠 **Advanced AI Intelligence**: While FireCrawl uses basic text extraction, SniffHunt employs cognitive modeling to understand context and semantics
-* ⚛️ **Interactive Content Mastery**: Handles complex SPAs and dynamic interfaces that cause other tools to fail completely  
-* 🕹️ **True UI Understanding**: Navigates tabs, modals, and dropdowns like a human user, not just scraping static HTML
-* 💬 **LLM-Optimized Output**: Generates markdown specifically formatted for optimal LLM consumption and context understanding
-* 📦 **Enterprise Privacy**: Runs entirely in your local environment, unlike cloud-based tools that process your data externally
-* 🔐 **Zero Vendor Lock-in**: Open source with complete control, vs. proprietary APIs that can change pricing anytime
+## Key Features
 
+### 🧠 Advanced AI Intelligence
+While FireCrawl, Jina & Others uses basic text extraction, SniffHunt employs cognitive modeling to understand context and semantics.
 
-## ⚙️ Quick Start Guide (≈1 Minute Setup)
+### ⚛️ Interactive Content Mastery
+Handles complex SPAs and dynamic interfaces that cause other tools to fail completely.
 
-### Installation & Launch
+### 🕹️ True UI Understanding
+Navigates tabs, modals, and dropdowns like a human user, not just scraping static HTML.
 
-#### Step 1:
+### 💬 LLM-Optimized Output
+Generates markdown specifically formatted for optimal LLM consumption and context understanding.
+
+### 📦 Enterprise Privacy
+Runs entirely in your local environment, unlike cloud-based tools that process your data externally.
+
+## Quick Start Guide
+
+> **What You'll Learn:** How to install and configure SniffHunt, start the API server and web interface, set up MCP integration for AI tools, and see basic usage examples for each component.
+
+### ⚙️ Prerequisites
+
+Before we begin, make sure you have:
+
+- **Bun** >= 1.2.15 ([Install Bun](https://bun.sh/docs/installation))
+- **Google Gemini API Key** ([Get free key from Google AI Studio](https://makersuite.google.com/app/apikey))
+
+> **⚠️ API Key Required:** You'll need a Google Gemini API key for the AI-powered content extraction. The free tier is generous and perfect for getting started.
+
+### 🛠️ Installation & Setup
+
+#### Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/mpmeetpatel/sniffhunt-scraper.git
 cd sniffhunt-scraper
 ```
 
-#### Step 2:
+#### Step 2: Install Dependencies
+
 ```bash
-pnpm install # or npm install
-cp .env.example .env # Add your Gemini API key (OR You can add multiple Gemini API Keys as well)
+bun install
 ```
 
-### Step 3:
+This installs all dependencies for the entire workspace including all apps.
+
+#### Step 3: Configure Environment
+
 ```bash
-pnpm start # or npm start
+cp .env.example .env
 ```
 
-<img src="./assets/quick-start.gif" alt="Quick Start">
+Edit the `.env` file and add your Gemini API key:
 
-**Expected Output (Output will slightly differ based on your system):**
-- Check your output and use that MCP configuration in your MCP-compatible client
-- You can check demo video for more details
+```bash
+# Required
+GOOGLE_GEMINI_KEY=your_actual_api_key_here
 
-```
-✅ Context Scraper API server running on http://0.0.0.0:6000 or http://localhost:6000
+# Optional (You can provide multiple keys here to avoid rate limiting & load balancing)
+GOOGLE_GEMINI_KEY1=your_alternative_key_1
+GOOGLE_GEMINI_KEY2=your_alternative_key_2
+GOOGLE_GEMINI_KEY3=your_alternative_key_3
 
-Example curl usage: 
-
-curl -X POST http://localhost:6000/scrape -H "Content-Type: application/json" -d '{"url": "https://example.com", "mode": "normal"}'
-curl -X POST http://localhost:6000/scrape -H "Content-Type: application/json" -d '{"url": "https://anu-vue.netlify.app/guide/components/alert.html", "mode": "beast", "query": "Outlined Alert Code snippets"}'
-----------------------------------------------------
-
-🔧 MCP Configuration (Copy & Paste):
-{
-  "mcpServers": {
-    "sniffhunt-scraper": {
-      "command": "node",
-      "args": [
-        "/Users/meetpatel/Developer/Release/sniffhunt-scraper/mcp/src/index.js"
-      ]
-    }
-  }
-}
-----------------------------------------------------
-
-Try Some Examples:
-
-scrape https://example.com using beast mode
-Parse https://example.com in normal mode
-Extract https://anu-vue.netlify.app/guide/components/alert.html in beast mode & grab the "Outlined Alert Code snippets"
+# Optional (defaults shown)
+PORT=8080
+MAX_RETRY_COUNT=2
+RETRY_DELAY=1000
+PAGE_TIMEOUT=10000
+CORS_ORIGIN=*
 ```
 
-## 🔧 Model Context Protocol Integration
+## Integration Methods
 
-SniffHunt functions as a **contextual knowledge acquisition node** for LLMs through the Model Context Protocol. This integration transforms SniffHunt from a simple scraping tool into an intelligent content ingestion agent.
+Choose your preferred way to use SniffHunt:
 
-### MCP Configuration
+### 🚀 Option 1: API Server + Web Interface
 
-Add to your MCP-compatible client configuration:
+Perfect for interactive use and web application integration.
+
+#### Start the API Server
+
+```bash
+bun run dev:server
+```
+
+The server will start on `http://localhost:8080`
+
+#### Start the Web Interface (Optional)
+
+```bash
+# In a new terminal
+bun run dev:web
+```
+
+Open `http://localhost:6001` in your browser for the beautiful web interface.
+
+#### Test the Setup
+
+```bash
+# Test the API
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com", "mode": "normal"}'
+```
+
+### 🤖 Option 2: MCP Integration for AI Tools
+
+Integrate SniffHunt directly with Claude Desktop, Cursor, or other MCP-compatible AI tools.
+
+#### Build and Setup MCP Server
+
+```bash
+bun run setup:mcp
+```
+
+This builds the MCP server and makes it globally available.
+
+#### Configure Your AI Client
+
+Add this to your MCP client configuration (e.g., Cursor, Windsurf, VSCode, Claude Desktop):
 
 ```json
 {
   "mcpServers": {
     "sniffhunt-scraper": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/sniffhunt-scraper/mcp/src/index.js"
-      ]
+      "command": "npx",
+      "args": ["-y", "sniffhunt-scraper-mcp-server"],
+      "env": {
+        "GOOGLE_GEMINI_KEY": "your-api-key-here"
+      }
     }
   }
 }
 ```
 
-> **Path Configuration**: Replace `/absolute/path/to/sniffhunt-scraper/` with your actual installation directory
+#### Test MCP Integration
 
-### Natural Language Commands
+Restart your AI client and try asking:
 
-Your AI agent can now process commands like:
-* `Extract https://anu-vue.netlify.app/guide/components/alert.html in beast mode & grab the "Outlined Alert Code snippets"`
-* `Give me code of Heartbeat EffectOutlined by scraping https://shadcnstudio.com/docs/components/button using beast mode`
+> Scrape https://anu-vue.netlify.app/guide/components/alert.html & grab the 'Outlined Alert Code snippets'
 
-## 🧠 Intelligent Extraction Modes
+The AI will automatically use SniffHunt to extract the content!
 
-### ⚡ Normal Mode — Static & Lightly Dynamic Content
+### 🌐 Option 3: Web Interface
 
-Optimized for standard web pages and simple SPAs:
+React-based web interface with modern UI and real-time scraping capabilities.
 
-* ✅ **Single-Page Applications** (React, Vue, Angular)
-* ✅ **Lazy-Loaded Content** with intelligent wait strategies
-* ✅ **Semantic Markdown Conversion** from complex DOM structures
-* ✅ **Fast Processing** for high-volume extraction tasks
+#### Prerequisites
 
-**Best For**: Documentation sites, blogs, news articles, product pages
+1. **Complete Setup**: Follow the Quick Start Guide for initial setup
+2. **API Server Running**: The web interface requires the API server
+3. **Environment Configured**: Ensure `.env` file is properly set up
 
-### 🦁 Beast Mode — Complex Interactive Interfaces
-
-Advanced interaction modeling for sophisticated web applications:
-
-* ✅ **UI Component Interaction** (tabs, accordions, modals, dropdowns)
-* ✅ **AJAX Content Resolution** with dynamic loading detection
-* ✅ **Dashboard Navigation** through complex interface states
-* ✅ **Context-Aware Extraction** based on semantic understanding
-
-**Best For**: Admin dashboards, analytics tools, component libraries, configurators
-
-### Component Library Documentation
-```bash
-# Extract code examples
-curl -X POST http://localhost:6000/scrape \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
-    "mode": "beast",
-    "query": "Outlined Alert Code snippets"
-  }'
-```
+#### Starting the Web Interface
 
 ```bash
-curl -X POST http://localhost:6000/scrape \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://shadcnstudio.com/docs/components/button",        
-    "mode": "beast",
-    "query": "Give me code of Heartbeat EffectOutlined"                 
-  }'
+# Step 1: Start the API server (Terminal 1)
+bun run dev:server
+
+# Step 2: Start the web interface (Terminal 2)
+bun run dev:web
 ```
 
-## 📡 API Reference
+**Access Points:**
+- 🌐 **Web Interface**: `http://localhost:6001`
+- 🔌 **API Server**: `http://localhost:8080`
 
-### `POST /scrape` - Content Extraction Endpoint
+### ⚡ Option 4: CLI Scraper
+
+Perfect for automation, scripting, and one-off extractions.
+
+#### Basic Usage
+
+```bash
+# Scrape any website
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+
+# Output saved as:
+# scraped.raw.md or scraped.md (based on mode and query automatically generated name)
+# scraped.html
+```
+
+#### Advanced Usage
+
+```bash
+# Use normal mode for static sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode normal
+
+# Use beast mode for complex sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets" --mode beast
+
+# Add semantic query for focused extraction & Custom output filename
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets" --output my-content
+```
+
+## MCP Integration
+
+Model Context Protocol server for AI integrations.
+
+### 🤖 What is MCP?
+
+Model Context Protocol (MCP) is a standardized way for AI applications to access external tools and data sources. SniffHunt's MCP server allows AI models to scrape and extract web content as part of their reasoning process.
+
+> **💡 MCP Benefits:**
+> - **Direct AI Integration**: Use scraping within AI conversations
+> - **Tool Calling**: AI models can scrape websites automatically
+> - **Context Enrichment**: Provide real-time web data to AI models
+> - **Standardized Interface**: Works with any MCP-compatible AI client
+
+### 📝 Prerequisites
+
+Before setting up MCP integration, ensure you have:
+
+1. **SniffHunt Installed**: Complete the Quick Start Guide first
+2. **API Key Configured**: Google Gemini API key in your `.env` file
+3. **MCP Client**: Claude Desktop, Cursor, or another MCP-compatible AI tool
+
+### 🔧 Steps to integrate MCP
+
+#### Step 1: Build and Setup MCP Server
+
+```bash
+# Build and setup MCP server from root directory
+bun run setup:mcp
+```
+
+This command:
+
+1. **Builds the MCP server** with all scraping capabilities
+2. **Publishes globally** via `npx` for any AI client to use (Locally only, will not publish to npm or any other package registry)
+3. **Creates the binary** that MCP clients can execute
+
+**What happens internally:**
+
+- Compiles the MCP server from `apps/mcp/src/`
+- Builds dependencies and scraper functionality
+- Makes `sniffhunt-scraper-mcp-server` available globally
+
+#### Step 2: Configure Your AI Client
+
+Add this configuration to your MCP client:
+
+##### Cursor/VSCode/Windsurf IDE
+
+```json
+{
+  "mcpServers": {
+    "sniffhunt-scraper": {
+      "command": "npx",
+      "args": ["-y", "sniffhunt-scraper-mcp-server"],
+      "env": {
+        "GOOGLE_GEMINI_KEY": "your_actual_api_key_here"
+      }
+    }
+  }
+}
+```
+
+**Important Notes:**
+
+- Replace `your_actual_api_key_here` with your real Google Gemini API key
+- Environment variables are passed directly to the MCP server process
+
+#### Step 3: Restart Your AI Client
+
+After adding the configuration:
+
+1. **Close** your AI client completely
+2. **Restart** the application
+3. **Verify** the MCP server is loaded (look for SniffHunt tools in your AI client)
+
+#### Step 4: Test the Integration
+
+Your AI client should now have access to SniffHunt scraping capabilities. Test by asking:
+
+> **💡 Try These Examples:**
+> - Can you scrape https://news.ycombinator.com and summarize the top stories?
+> - Can you scrape https://anu-vue.netlify.app/guide/components/alert.html and grab code snippets for outlined alerts?
+
+The AI will automatically use SniffHunt to fetch and process the content!
+
+### 🔍 Available MCP Tools
+
+#### `scrape_website`
+
+Scrape and extract content from any website.
+
+**Parameters:**
+
+- `url` (required): Target URL to scrape
+- `mode` (optional): `normal` or `beast` (default: beast)
+- `userQuery` (optional): Natural language description of desired content
+
+**Example Usage in AI Chat:**
+
+```
+User: "Can you scrape https://news.ycombinator.com and get the top 5 stories?"
+
+AI: I'll scrape Hacker News for you and extract the top stories.
+[Uses scrape_website tool with url="https://news.ycombinator.com" and userQuery="top 5 stories"]
+```
+
+#### Tool Response Format
+
+The MCP tool returns data in the standard MCP format. The actual response structure:
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": {
+        "success": true,
+        "url": "https://example.com",
+        "mode": "beast",
+        "processingTime": 2.34,
+        "markdownLength": 12450,
+        "htmlLength": 45230,
+        "hasEnhancedError": false,
+        "enhancedErrorMessage": null,
+        "markdown": "# Page Title\\n\\nExtracted content in markdown format...",
+        "html": "<html>Raw HTML content...</html>"
+      }
+    }
+  ]
+}
+```
+
+**Response Fields:**
+
+- `success`: Boolean indicating if scraping was successful
+- `url`: The scraped URL
+- `mode`: Scraping mode used (`normal` or `beast`)
+- `processingTime`: Time taken for scraping in seconds
+- `markdownLength`: Length of extracted markdown content
+- `htmlLength`: Length of raw HTML content
+- `hasEnhancedError`: Boolean indicating if enhanced error info is available
+- `enhancedErrorMessage`: Human-readable error message (if any)
+- `markdown`: Cleaned, structured content in markdown format
+- `html`: Raw HTML content from the page
+
+## API Server
+
+Hono-based API server with streaming and sync endpoints.
+
+### 📝 Prerequisites
+
+Before starting the server, ensure you have:
+
+1. **Environment Setup**: A `.env` file in the root directory with your Google Gemini API key
+2. **Dependencies Installed**: Run `bun install` from the root directory
+
+### 🟢 Starting the Server
+
+#### From Root (Recommended)
+
+```bash
+# Start from root directory (automatically loads .env)
+bun run dev:server
+```
+
+**Benefits:**
+- Automatically loads environment variables from root `.env`
+- Consistent with other workspace commands
+- No need to navigate to subdirectories
+
+#### Individual App Alternative
+
+```bash
+# Alternative: Start from server directory
+cd apps/server
+bun dev
+```
+
+The server will start on `http://localhost:8080` by default.
+
+#### Verify Server is Running
+
+```bash
+# Health check
+curl http://localhost:8080/health
+
+# Expected response:
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0",
+  "timestamp": "xxxxx"
+}
+```
+
+### 📡 API Reference
+
+#### Health Check Endpoints
+
+##### `GET /` & `GET /health`
+
+Returns API health status and configuration validation.
+
+**Response:**
+
+```json
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0",
+  "timestamp": "xxxxx"
+}
+```
+
+#### Content Extraction Endpoints
+
+##### `POST /scrape` - Streaming Content Extraction
+
+Real-time streaming extraction with progress updates.
 
 **Request Body:**
+
 ```json
 {
-  "url": "https://example.com", // (required)
-  "mode": "normal" | "beast", // Default: normal, use beast for complex interfaces
-  "query": "natural language content description" // (optional but good to have)
+  "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+  "mode": "normal" | "beast",
+  "query": "natural language content description"
+}
+```
+
+**Example:**
+
+```bash
+curl -N http://localhost:8080/scrape \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://anu-vue.netlify.app/guide/components/alert.html", "mode": "beast"}'
+```
+
+**Response:** Server-Sent Events (SSE) stream with real-time updates.
+
+##### `POST /scrape-sync` - Synchronous Content Extraction
+
+Standard synchronous extraction for simple integrations.
+
+**Request Body:**
+
+```json
+{
+  "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+  "mode": "normal" | "beast",
+  "query": "natural language content description"
 }
 ```
 
 **Parameters:**
+
 - `url` (required): Target URL for content extraction
-- `mode` (optional): Extraction strategy (`normal` for standard content, `beast` for interactive interfaces)
-- `query` (optional): Natural language description of desired content for semantic filtering
+- `mode` (optional): Extraction strategy
+  - `normal`: Standard content extraction (default)
+  - `beast`: Interactive interface handling with AI intelligence
+- `query` (optional): Natural language description for semantic filtering
 
 **Response Format:**
+
 ```json
 {
   "success": true,
   "content": "# Extracted Content\n\nMarkdown-formatted content here...",
   "metadata": {
     "title": "Page Title",
-    "url": "https://example.com",
-    "mode": "beast"
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "beast",
+    "extractionTime": 3.2,
+    "contentLength": 15420
   }
 }
 ```
 
-### `GET /health` - Service Status
+### 📊 Scraping Modes
 
-Returns API health status and configuration validation.
+#### Normal Mode
 
-## 🛠️ Troubleshooting & Diagnostics
+- **Best for**: Static content, blogs, documentation
+- **Performance**: Fast extraction
+- **Capabilities**: Basic content extraction (still better than paid services even in normal mode)
 
-### Browser Engine Issues
-If you encounter browser runtime failures:
+#### Beast Mode
+
+- **Best for**: SPAs, dynamic dashboards, interactive interfaces
+- **Performance**: Intelligent extraction with AI processing
+- **Capabilities**:
+  - UI interaction (clicks, scrolls, navigation)
+  - Modal and popup handling
+  - Dynamic content loading
+  - Semantic content understanding
+
+> **💡 Mode Selection:** Use `normal` mode for standard websites and `beast` mode for complex web applications that require interaction or have dynamic content runtime content.
+
+#### Semantic Content Filtering Examples
+
+Use the `query` parameter to extract specific content like this:
 
 ```bash
-# Install Playwright dependencies 
-# (if not already installed or have issues)
-npx -y playwright-core install --with-deps --only-shell chromium
+# Extract Avatar Code snippets
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/avatar.html",
+    "mode": "beast",
+    "query": "Grab the Avatar Code snippets"
+  }'
+
+# Extract API reference and code examples
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "normal",
+    "query": "Grab API reference and code examples"
+  }'
 ```
 
-### Extraction Quality Issues
+## CLI Scraper
 
-**Problem**: Incomplete or inaccurate content extraction
-**Solutions**:
-1. Verify Gemini API key configuration and quota limits
-2. Monitor server logs for timeout or authentication failures
-3. Switch from `normal` to `beast` mode for complex interfaces
-4. Refine natural language query for better semantic targeting
+Command-line interface for direct web scraping operations.
 
-**Problem**: Slow extraction performance
-**Solutions**:
-1. Use `normal` mode for static content when possible
-2. Implement request caching for frequently accessed URLs
-3. Optimize query specificity to reduce processing scope
+### 📝 Prerequisites
 
-## 🤝 Contributing to SniffHunt
+Before starting the CLI scraper, ensure you have:
 
-We welcome contributions from the developer community:
+1. **Environment Setup**: A `.env` file in the root directory with your Google Gemini API key
+2. **Dependencies Installed**: Run `bun install` from the root directory
 
-### Development Setup
-1. **Fork Repository**: Create your own fork of SniffHunt
-2. **Feature Branch**: `git checkout -b feature/your-enhancement`
-3. **Development**: Make changes with comprehensive test coverage
-4. **Testing**: Ensure all existing tests pass and add new test cases
-5. **Pull Request**: Submit with clear description and rationale
+### 💻 Using the CLI Scraper
 
-### Contribution Guidelines
-- Follow existing code style and architectural patterns
-- Update documentation for user-facing changes
-- Ensure backward compatibility unless breaking changes are necessary
-- Soon will add guideline doc
+#### From Root (Recommended)
+
+```bash
+# Recommended: Run from root directory
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+#### Individual App Alternative
+
+```bash
+# Alternative: Run from scraper directory
+cd apps/scraper
+bun cli.js https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+### 📜 Basic Usage
+
+#### Simple Website Scraping
+
+```bash
+# Scrape a basic website
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+
+# Output will be saved to a markdown file
+# Output: example-com-20240115-143022.md
+```
+
+#### Advanced Scraping with Options
+
+```bash
+# Scrape with beast mode for complex sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast
+
+# Scrape with custom query for semantic filtering
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+
+# Combine options
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast --query "Grab the Outlined Alert Code snippets" --output custom-name
+```
+
+### 💭 Command Line Options
+
+#### URL (Required)
+
+The target URL to scrape. Must be the first argument.
+
+```bash
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+#### `--mode` or `-m`
+
+Choose the scraping strategy:
+
+- `normal` (default): Fast extraction for static content
+- `beast`: AI-powered extraction for interactive content
+
+```bash
+# Normal mode (default)
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode normal
+
+# Beast mode for SPAs and dynamic content
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast
+```
+
+#### `--query` or `-q`
+
+Natural language description of desired content for semantic filtering.
+
+```bash
+# Extract specific content
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+```
+
+#### `--output` or `-o`
+
+Specify custom output filename.
+
+```bash
+# Custom filename
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --output my-content
+```
+
+#### `--help` or `-h`
+
+Display help information and available options.
+
+```bash
+bun run cli:scraper --help
+```
+
+### 📖 Complete Command Reference
+
+```bash
+# Full syntax
+bun run cli:scraper <URL> [OPTIONS]
+
+# Options:
+#   -m, --mode <mode>      Scraping mode: normal|beast (default: normal)
+#   -q, --query <query>    Natural language content filter
+#   -o, --output <file>    Output filename (default: auto-generated)
+#   -h, --help             Show help information
+```
+
+## Web Interface
+
+React-based web interface with modern UI and real-time scraping.
+
+### 📝 Prerequisites
+
+Before starting the web interface:
+
+1. **Complete Setup**: Follow the Quick Start Guide for initial setup
+2. **API Server Running**: The web interface requires the API server
+3. **Environment Configured**: Ensure `.env` file is properly set up
+
+### 🌐 Starting the Web Interface
+
+#### From Root (Recommended)
+
+```bash
+# Step 1: Start the API server (Terminal 1)
+bun run dev:server
+
+# Step 2: Start the web interface (Terminal 2)
+bun run dev:web
+```
+
+**Access Points:**
+
+- 🌐 **Web Interface**: `http://localhost:6001`
+- 🔌 **API Server**: `http://localhost:8080`
+
+**Benefits:**
+
+- Consistent workspace environment
+- Automatic environment variable loading
+- Coordinated development setup
+
+#### Individual App Alternative
+
+```bash
+# Alternative: Start from web directory
+cd apps/web
+bun dev
+```
+
+**Note:** This method also loads the root `.env` file automatically.
+
+#### Verify Setup
+
+1. **API Server Health**: Visit `http://localhost:8080/health`
+2. **Web Interface**: Open `http://localhost:6001` in your browser
+3. **Test Scraping**: Try scraping `https://example.com` with normal mode
+
+### 📱 Usage Guide
+
+#### Basic Scraping Workflow
+
+##### Step 1: Enter Target URL
+
+Type or paste the website URL you want to scrape (for example):
+
+- `https://anu-vue.netlify.app/guide/components/alert.html`
+
+##### Step 2: Select Scraping Mode
+
+**Normal Mode** - For standard websites
+
+**Beast Mode** - For complex applications
+
+##### Step 3: Add Semantic Query (Optional)
+
+Use natural language to specify what content you want (for example):
+
+- "Grab code snippets & API Reference"
+
+##### Step 4: Start Scraping
+
+Click the **"Extract Content"** button and watch real-time progress:
+
+1. 🔗 **Connecting** - Establishing connection to target site
+2. ⏳ **Loading** - Page loading and rendering
+3. 🧠 **Analyzing** - AI-powered content understanding (Beast mode)
+4. ⚡ **Extracting** - Converting to markdown format
+5. ✅ **Complete** - Content ready for use
+
+## ✅ Verify Installation
+
+### Health Check
+
+```bash
+# Check if API server is running
+curl http://localhost:8080/health
+
+# Should return:
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0"
+}
+```
+
+### Test Extraction
+
+#### API Test
+
+```bash
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "normal",
+    "query": "Grab the Outlined Alert Code snippets"
+  }'
+```
+
+#### CLI Test
+
+```bash
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+```
+
+#### Web UI Test
+
+1. Open `http://localhost:6001`
+2. Enter URL: `https://anu-vue.netlify.app/guide/components/alert.html`
+3. Select mode: "Normal"
+4. Add query: "Grab the Outlined Alert Code snippets"
+5. Click "Extract Content"
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### API Key Missing
+**Error**: "API key not configured"
+
+**Solution**: Ensure `GOOGLE_GEMINI_KEY` is set in your `.env` file with a valid Gemini API key.
+
+#### Port Already in Use
+**Error**: "Port 8080 already in use"
+
+**Solution**: Close any other process that is using port 8080 or change the port in your `.env` file:
+
+```bash
+PORT=6001
+```
+
+#### Browser Installation
+**Error**: "Browser not found"
+
+**Solution**: Install Playwright browser dependencies:
+
+```bash
+bunx playwright-core install --with-deps --only-shell chromium
+```
+
+## Use Cases
+
+- **Content Research**: Extract structured data from any website
+- **AI Workflows**: Provide real-time web content to LLM applications
+- **Data Mining**: Automated content extraction for analysis
+- **Documentation**: Convert web content to markdown for documentation
+- **API Integration**: RESTful endpoints for programmatic access
+
 
 ## 🌟 Community & Support
 
@@ -272,7 +863,6 @@ We welcome contributions from the developer community:
 
   <img src="./assets/buymecoffe.png" alt="Buy Me Coffee" width="200">
 
-
 ## 📄 License & Legal
 
 - **Personal Use:** Free
@@ -281,3 +871,6 @@ We welcome contributions from the developer community:
 - **License** - see [LICENSE](https://github.com/MpMeetPatel/sniffhunt-scraper/blob/main/LICENCE) file for details.
 
 **Privacy & Compliance**: SniffHunt is a true privacy-first solution that runs entirely on your infrastructure, ensuring your data never leaves your control.
+
+---
+

@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "main": "src/index.ts",
+  "type": "module",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "dev": "bun --watch src/index.ts",
+    "start": "bun run dist/index.js"
+  },
+  "dependencies": {
+    "scraper": "workspace:*",
+    "@hono/node-server": "^1.17.0",
+    "dotenv": "^17.2.1",
+    "zod": "^3.24.2",
+    "hono": "^4.8.2"
+  },
+  "devDependencies": {
+    "tsdown": "^0.12.9",
+    "typescript": "^5.9.2",
+    "@types/bun": "^1.2.6"
+  }
+}

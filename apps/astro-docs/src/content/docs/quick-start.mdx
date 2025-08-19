@@ -1,0 +1,252 @@
+---
+title: Quick Start Guide
+description: Get up and running with SniffHunt in under 2 minutes
+icon: Rocket
+---
+
+:::tip[What You'll Learn]
+
+- How to install and configure SniffHunt
+- How to start the API server and web interface
+- How to set up MCP integration for AI tools
+- Basic usage examples for each component
+  :::
+
+### ⚙️ Prerequisites
+
+Before we begin, make sure you have:
+
+- **Bun** >= 1.2.15 ([Install Bun](https://bun.sh/docs/installation))
+- **Google Gemini API Key** ([Get free key from Google AI Studio](https://makersuite.google.com/app/apikey))
+
+:::caution[API Key Required]
+You'll need a Google Gemini API key for the AI-powered content extraction. The free tier is generous and perfect for getting started.
+:::
+
+### 🛠️ Installation & Setup
+
+##### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/mpmeetpatel/sniffhunt-scraper.git
+cd sniffhunt-scraper
+```
+
+##### Step 2: Install Dependencies
+
+```bash
+bun install
+```
+
+This installs all dependencies for the entire workspace including all apps.
+
+##### Step 3: Configure Environment
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file and add your Gemini API key:
+
+```bash title=".env"
+# Required
+GOOGLE_GEMINI_KEY=your_actual_api_key_here
+
+# Optional (You can provide multiple keys here to avoid rate limiting & load balancing)
+GOOGLE_GEMINI_KEY1=your_alternative_key_1
+GOOGLE_GEMINI_KEY2=your_alternative_key_2
+GOOGLE_GEMINI_KEY3=your_alternative_key_3
+
+# Optional (defaults shown)
+PORT=8080
+MAX_RETRY_COUNT=2
+RETRY_DELAY=1000
+PAGE_TIMEOUT=10000
+CORS_ORIGIN=*
+```
+
+### 🚀 Launch Options
+
+Choose your preferred way to use SniffHunt:
+
+#### Option 1: API Server + Web Interface
+
+Perfect for interactive use and web application integration.
+
+##### Start the API Server
+
+```bash
+bun run dev:server
+```
+
+The server will start on `http://localhost:8080`
+
+##### Start the Web Interface (Optional)
+
+```bash
+# In a new terminal
+bun run dev:web
+```
+
+Open `http://localhost:6001` in your browser for the beautiful web interface.
+
+##### Test the Setup
+
+```bash
+# Test the API
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com", "mode": "normal"}'
+```
+
+#### Option 2: MCP Integration for AI Tools
+
+Integrate SniffHunt directly with Claude Desktop, Cursor, or other MCP-compatible AI tools.
+
+##### Build and Setup MCP Server
+
+```bash
+bun run setup:mcp
+```
+
+This builds the MCP server and makes it globally available.
+
+##### Configure Your AI Client
+
+Add this to your MCP client configuration (e.g., Cursor, Windsurf, VSCode, Claude Desktop):
+
+```json title="mcp_config.json"
+{
+  "mcpServers": {
+    "sniffhunt-scraper": {
+      "command": "npx",
+      "args": ["-y", "sniffhunt-scraper-mcp-server"],
+      "env": {
+        "GOOGLE_GEMINI_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+##### Test MCP Integration
+
+Restart your AI client and try asking:
+
+> Scrape https://anu-vue.netlify.app/guide/components/alert.html & grab the 'Outlined Alert Code snippets'
+
+The AI will automatically use SniffHunt to extract the content!
+
+#### Option 3: CLI Scraper
+
+Perfect for automation, scripting, and one-off extractions.
+
+##### Basic Usage
+
+```bash
+# Scrape any website
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+
+# Output saved as:
+scraped.raw.md or scraped.md # (based on mode and query automatically generated name)
+scraped.html
+```
+
+##### Advanced Usage
+
+```bash
+# Use normal mode for static sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode normal
+
+# Use beast mode for complex sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets" --mode beast
+
+# Add semantic query for focused extraction & Custom output filename
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets" --output my-content
+```
+
+#### ✅ Verify Installation
+
+##### Health Check
+
+```bash
+# Check if API server is running
+curl http://localhost:8080/health
+
+# Should return:
+{
+  "status": "healthy",
+  "service": "SniffHunt Scraper API",
+  "version": "1.0.0"
+}
+```
+
+#### Test Extraction
+
+##### API Test
+
+```bash
+curl -X POST http://localhost:8080/scrape-sync \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://anu-vue.netlify.app/guide/components/alert.html",
+    "mode": "normal",
+    "query": "Grab the Outlined Alert Code snippets"
+  }'
+```
+
+##### CLI Test
+
+```bash
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+```
+
+##### Web UI Test
+
+1. Open `http://localhost:6001`
+2. Enter URL: `https://anu-vue.netlify.app/guide/components/alert.html`
+3. Select mode: "Normal"
+4. Add query: "Grab the Outlined Alert Code snippets"
+5. Click "Extract Content"
+
+### 🔧 Troubleshooting
+
+##### Common Issues
+
+:::danger[API Key Missing]
+**Error**: "API key not configured"
+
+**Solution**: Ensure `GOOGLE_GEMINI_KEY` is set in your `.env` file with a valid Gemini API key.
+:::
+
+:::danger[Port Already in Use]
+**Error**: "Port 8080 already in use"
+
+**Solution**: Close any other process that is using port 8080 or change the port in your `.env` file:
+
+```bash
+PORT=6001
+```
+
+:::
+
+:::danger[Browser Installation]
+**Error**: "Browser not found"
+
+**Solution**: Install Playwright browser dependencies:
+
+```bash
+bunx playwright-core install --with-deps --only-shell chromium
+```
+
+:::
+
+##### Need Help?
+
+- 🐞 **Bug Reports**: [GitHub Issues](https://github.com/mpmeetpatel/sniffhunt-scraper/issues)
+- 💬 **Questions**: [GitHub Discussions](https://github.com/mpmeetpatel/sniffhunt-scraper/discussions)
+- 📧 **Support**: contact me on [Twitter](https://x.com/___meetpatel___)
+
+---
+
+**Ready to extract some content?** Choose your preferred integration method above and start scraping! 🚀

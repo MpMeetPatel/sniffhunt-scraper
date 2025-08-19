@@ -1,36 +1,29 @@
-# dev
-.netlify/
-.yarn/
-!.yarn/releases
-.vscode/*
-!.vscode/launch.json
-!.vscode/*.code-snippets
-.idea/workspace.xml
-.idea/usage.statistics.xml
-.idea/shelf
+node_modules
+.turbo
 
-# deps
-node_modules/
-
-# env
+# Environment variables
 .env
+.env.local
 .env.production
+.env.test
 
-# logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# build artifacts
+# Build outputs
 dist/
-*.zip
-response.json
+build/
 
-# misc
+# Scraped files
+scraped*
+*.scraped.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
-langfuse
-keys-manager.json
+Thumbs.db
+
+# Keys manager
+**/keys-manager.json
+# Local Netlify folder
+.netlify

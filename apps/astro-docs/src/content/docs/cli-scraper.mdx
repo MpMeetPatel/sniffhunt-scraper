@@ -1,0 +1,122 @@
+---
+title: CLI Scraper
+description: Command-line interface for direct web scraping operations
+icon: Terminal
+---
+
+### 📝 Prerequisites
+
+Before starting the CLI scraper, ensure you have:
+
+1. **Environment Setup**: A `.env` file in the root directory with your Google Gemini API key
+2. **Dependencies Installed**: Run `bun install` from the root directory
+
+:::tip[First Time Setup]
+If this is your first time, follow our [Quick Start Guide](/quick-start) for complete setup instructions.
+:::
+
+### 💻 Using the CLI Scraper
+
+##### From Root (Recommended)
+
+```bash
+# Recommended: Run from root directory
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+##### Individual App Alternative
+
+```bash
+# Alternative: Run from scraper directory
+cd apps/scraper
+bun cli.js https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+### 📜 Basic Usage
+
+##### Simple Website Scraping
+
+```bash
+# Scrape a basic website
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+
+# Output will be saved to a markdown file
+# Output: example-com-20240115-143022.md
+```
+
+##### Advanced Scraping with Options
+
+```bash
+# Scrape with beast mode for complex sites
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast
+
+# Scrape with custom query for semantic filtering
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+
+# Combine options
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast --query "Grab the Outlined Alert Code snippets" --output custom-name
+```
+
+### 💭 Command Line Options
+
+##### URL (Required)
+
+The target URL to scrape. Must be the first argument.
+
+```bash
+  bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html
+```
+
+##### `--mode` or `-m`
+
+Choose the scraping strategy:
+
+- `normal` (default): Fast extraction for static content
+- `beast`: AI-powered extraction for interactive content
+
+```bash
+# Normal mode (default)
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode normal
+
+# Beast mode for SPAs and dynamic content
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --mode beast
+```
+
+##### `--query` or `-q`
+
+Natural language description of desired content for semantic filtering.
+
+```bash
+# Extract specific content
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --query "Grab the Outlined Alert Code snippets"
+```
+
+##### `--output` or `-o`
+
+Specify custom output filename.
+
+```bash
+# Custom filename
+bun run cli:scraper https://anu-vue.netlify.app/guide/components/alert.html --output my-content
+```
+
+##### `--help` or `-h`
+
+Display help information and available options.
+
+```bash
+bun run cli:scraper --help
+```
+
+### 📖 Complete Command Reference
+
+```bash
+# Full syntax
+bun run cli:scraper <URL> [OPTIONS]
+
+# Options:
+#   -m, --mode <mode>      Scraping mode: normal|beast (default: normal)
+#   -q, --query <query>    Natural language content filter
+#   -o, --output <file>    Output filename (default: auto-generated)
+#   -h, --help             Show help information
+```

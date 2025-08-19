@@ -1,0 +1,155 @@
+---
+title: MCP Integration
+description: Model Context Protocol server for AI integrations
+icon: Bot
+---
+
+### 🤖 What is MCP?
+
+Model Context Protocol (MCP) is a standardized way for AI applications to access external tools and data sources. SniffHunt's MCP server allows AI models to scrape and extract web content as part of their reasoning process.
+
+:::tip[MCP Benefits]
+
+- **Direct AI Integration**: Use scraping within AI conversations
+- **Tool Calling**: AI models can scrape websites automatically
+- **Context Enrichment**: Provide real-time web data to AI models
+- **Standardized Interface**: Works with any MCP-compatible AI client
+  :::
+
+### 📝 Prerequisites
+
+Before setting up MCP integration, ensure you have:
+
+1. **SniffHunt Installed**: Complete the [Quick Start Guide](/quick-start) first
+2. **API Key Configured**: Google Gemini API key in your `.env` file
+3. **MCP Client**: Claude Desktop, Cursor, or another MCP-compatible AI tool
+
+:::note[What is MCP?]
+Model Context Protocol (MCP) allows AI applications to access external tools. With SniffHunt's MCP server, AI models can scrape websites as part of their reasoning process.
+:::
+
+### 🔧 Steps to integrate MCP
+
+#### Step 1: Build and Setup MCP Server
+
+```bash
+# Build and setup MCP server from root directory
+bun run setup:mcp
+```
+
+This command:
+
+1. **Builds the MCP server** with all scraping capabilities
+2. **Publishes globally** via `npx` for any AI client to use (Locally only, will not publish to npm or any other package registry)
+3. **Creates the binary** that MCP clients can execute
+
+**What happens internally:**
+
+- Compiles the MCP server from `apps/mcp/src/`
+- Builds dependencies and scraper functionality
+- Makes `sniffhunt-scraper-mcp-server` available globally
+
+#### Step 2: Configure Your AI Client
+
+Add this configuration to your MCP client:
+
+##### Cursor/VSCode/Windsurf IDE
+
+```json title="MCP Configuration (Locate mcp config json file for your IDE and paste this config)"
+{
+  "mcpServers": {
+    "sniffhunt-scraper": {
+      "command": "npx",
+      "args": ["-y", "sniffhunt-scraper-mcp-server"],
+      "env": {
+        "GOOGLE_GEMINI_KEY": "your_actual_api_key_here"
+      }
+    }
+  }
+}
+```
+
+**Important Notes:**
+
+- Replace `your_actual_api_key_here` with your real Google Gemini API key
+- Environment variables are passed directly to the MCP server process
+
+#### Step 3: Restart Your AI Client
+
+After adding the configuration:
+
+1. **Close** your AI client completely
+2. **Restart** the application
+3. **Verify** the MCP server is loaded (look for SniffHunt tools in your AI client)
+
+#### Step 4: Test the Integration
+
+Your AI client should now have access to SniffHunt scraping capabilities. Test by asking:
+
+:::tip[Try These Examples]
+
+- Can you scrape https://news.ycombinator.com and summarize the top stories?
+- Can you scrape https://anu-vue.netlify.app/guide/components/alert.html and grab code snippets for outlined alerts?
+  :::
+
+The AI will automatically use SniffHunt to fetch and process the content!
+
+### 🔍 Available MCP Tools
+
+#### `scrape_website`
+
+Scrape and extract content from any website.
+
+**Parameters:**
+
+- `url` (required): Target URL to scrape
+- `mode` (optional): `normal` or `beast` (default: beast)
+- `userQuery` (optional): Natural language description of desired content
+
+**Example Usage in AI Chat:**
+
+```
+User: "Can you scrape https://news.ycombinator.com and get the top 5 stories?"
+
+AI: I'll scrape Hacker News for you and extract the top stories.
+[Uses scrape_website tool with url="https://news.ycombinator.com" and userQuery="top 5 stories"]
+```
+
+#### Tool Response Format
+
+The MCP tool returns data in the standard MCP format. The actual response structure:
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": {
+        "success": true,
+        "url": "https://example.com",
+        "mode": "beast",
+        "processingTime": 2.34,
+        "markdownLength": 12450,
+        "htmlLength": 45230,
+        "hasEnhancedError": false,
+        "enhancedErrorMessage": null,
+        "markdown": "# Page Title\\n\\nExtracted content in markdown format...",
+        "html": "<html>Raw HTML content...</html>"
+      }
+    }
+  ]
+}
+```
+
+**Response Fields:**
+
+- `success`: Boolean indicating if scraping was successful
+- `url`: The scraped URL
+- `mode`: Scraping mode used (`normal` or `beast`)
+- `processingTime`: Time taken for scraping in seconds
+- `markdownLength`: Length of extracted markdown content
+- `htmlLength`: Length of raw HTML content
+- `hasEnhancedError`: Boolean indicating if enhanced error info is available
+- `enhancedErrorMessage`: Human-readable error message (if any)
+- `markdown`: Cleaned, structured content in markdown format
+- `html`: Raw HTML content from the page
