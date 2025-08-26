@@ -13,9 +13,10 @@
     "@astrojs/netlify": "^6.5.7",
     "@astrojs/starlight": "^0.35.2",
     "@astrojs/starlight-tailwind": "^4.0.1",
+    "@tailwindcss/vite": "^4.1.12",
     "add": "^2.0.6",
     "astro": "^5.13.2",
     "sharp": "^0.34.2",
-    "tailwind": "^4.0.0"
+    "tailwindcss": "^4.1.12"
   }
 }
