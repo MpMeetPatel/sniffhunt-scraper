@@ -830,10 +830,10 @@ PORT=6001
 #### Browser Installation
 **Error**: "Browser not found"
 
-**Solution**: Install Playwright browser dependencies:
+**Solution**: Install Playwright browser dependencies (run this command in the root directory of the project):
 
 ```bash
-bunx playwright-core install --with-deps --only-shell chromium
+cd apps/scraper && bunx playwright-core install --with-deps --only-shell chromium
 ```
 
 ## Use Cases

@@ -17,7 +17,10 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "postinstall": "bunx playwright-core install --with-deps --only-shell chromium"
+    "postinstall": "cd apps/scraper && bunx playwright-core install --with-deps --only-shell chromium",
+    "playwrite:install": "cd apps/scraper && bunx playwright-core install --with-deps --only-shell chromium",
+    "playwright:clean": "rm -rf ~/Library/Caches/ms-playwright && echo '✅ Playwright cache cleared'",
+    "playwright:version-check": "cd apps/scraper && echo '🔍 Checking playwright-core version...' && bunx playwright-core --version"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
