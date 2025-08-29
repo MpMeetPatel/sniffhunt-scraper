@@ -1,4 +1,5 @@
 import { chromium } from 'playwright-core';
+import { newInjectedContext } from 'fingerprint-injector';
 import { BROWSER_OPTIONS } from '../config.js';
 import { handleError } from '../utils/GlobalErrorHandler.js';
 import dotenv from 'dotenv';
@@ -25,9 +26,13 @@ export async function initBrowser() {
   try {
     console.log('🚀 Initializing browser...');
     browser = await chromium.launch(BROWSER_OPTIONS);
-    page = await browser.newPage({
+    const context = await newInjectedContext(browser);
+    // page = await browser.newPage({
+    //   viewport: BROWSER_OPTIONS.viewport,
+    // });
+    page = await context.newPage({
       viewport: BROWSER_OPTIONS.viewport,
-    });
+    })
     console.log('✅ Browser initialized successfully');
     return true;
   } catch (err) {

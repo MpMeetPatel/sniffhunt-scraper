@@ -14,6 +14,7 @@
     "@ai-sdk/google": "^1.2.22",
     "ai": "^4.3.19",
     "dotenv": "^17.2.1",
+    "fingerprint-injector": "^2.1.70",
     "html-entities": "^2.6.0",
     "playwright-core": "^1.54.1",
     "rehype-format": "^5.0.1",
