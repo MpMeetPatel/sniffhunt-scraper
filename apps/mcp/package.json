@@ -44,11 +44,11 @@
   "author": "SniffHunt Team",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.3",
+    "@modelcontextprotocol/sdk": "^1.17.4",
     "dotenv": "^17.2.1",
-    "playwright-core": "^1.54.1"
+    "playwright-core": "^1.55.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.0"
+    "@types/bun": "^1.2.21"
   }
 }

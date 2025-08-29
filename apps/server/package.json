@@ -14,14 +14,14 @@
   },
   "dependencies": {
     "scraper": "workspace:*",
-    "@hono/node-server": "^1.17.0",
+    "@hono/node-server": "^1.19.0",
     "dotenv": "^17.2.1",
-    "zod": "^3.24.2",
-    "hono": "^4.8.2"
+    "zod": "^3.25.76",
+    "hono": "^4.9.5"
   },
   "devDependencies": {
-    "tsdown": "^0.12.9",
+    "tsdown": "^0.14.2",
     "typescript": "^5.9.2",
-    "@types/bun": "^1.2.6"
+    "@types/bun": "^1.2.21"
   }
 }

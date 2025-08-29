@@ -23,14 +23,19 @@
     "playwright:version-check": "cd apps/scraper && echo '🔍 Checking playwright-core version...' && bunx playwright-core --version"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "eslint": "^9.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "globals": "^15.0.0",
-    "prettier": "^3.0.0"
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2"
   },
   "packageManager": "bun@1.2.15",
   "dependencies": {
     "@types/mdx": "^2.0.13"
+  },
+  "overrides": {
+    "zod": "^3.25.76",
+    "ai": "^4.3.19",
+    "@ai-sdk/google": "^1.2.22"
   }
 }
