@@ -19,41 +19,6 @@ export async function combineContent(page, dynamicContents) {
         document
           .querySelectorAll('script, style')
           .forEach(element => element.remove());
-
-        document.querySelectorAll('*').forEach(element => {
-          // List of important elements to skip processing
-          const importantElements = [
-            'IFRAME',
-            'CODE',
-            'PRE',
-            'A',
-            'IMG',
-            'FORM',
-            'INPUT',
-            'VIDEO',
-            'AUDIO',
-            'BUTTON',
-            'SELECT',
-            'TEXTAREA',
-            'CANVAS',
-            'SVG',
-            'LINK',
-          ];
-
-          // Skip if element is important OR is inside a table OR is inside iframe/code/pre
-          if (
-            importantElements.includes(element.tagName) ||
-            element.closest('table') ||
-            element.closest('iframe, code, pre')
-          ) {
-            return;
-          }
-
-          // Remove all attributes from non-important elements
-          Array.from(element.attributes).forEach(attr => {
-            element.removeAttribute(attr.name);
-          });
-        });
       });
       return await page.content();
     }
@@ -250,41 +215,6 @@ export async function combineContent(page, dynamicContents) {
       document
         .querySelectorAll('script, style')
         .forEach(element => element.remove());
-
-      document.querySelectorAll('*').forEach(element => {
-        // List of important elements to skip processing
-        const importantElements = [
-          'IFRAME',
-          'CODE',
-          'PRE',
-          'A',
-          'IMG',
-          'FORM',
-          'INPUT',
-          'VIDEO',
-          'AUDIO',
-          'BUTTON',
-          'SELECT',
-          'TEXTAREA',
-          'CANVAS',
-          'SVG',
-          'LINK',
-        ];
-
-        // Skip if element is important OR is inside a table OR is inside iframe/code/pre
-        if (
-          importantElements.includes(element.tagName) ||
-          element.closest('table') ||
-          element.closest('iframe, code, pre')
-        ) {
-          return;
-        }
-
-        // Remove all attributes from non-important elements
-        Array.from(element.attributes).forEach(attr => {
-          element.removeAttribute(attr.name);
-        });
-      });
     });
 
     return await page.content();

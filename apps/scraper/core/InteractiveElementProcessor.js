@@ -216,6 +216,8 @@ export async function findInteractiveElements(
     `🎯 Found ${result.object.elements.length} interactive elements to process`
   );
 
+  console.log(`📊 AI Reasoning: ${JSON.stringify(result.object, null, 2)}`);
+
   return result.object;
 }
 
@@ -449,7 +451,7 @@ async function _performInteraction(elementLocator, interactionType) {
       case 'click':
         // Scroll element into view first to ensure it's clickable
         await elementLocator.scrollIntoViewIfNeeded({ timeout: 3000 });
-        await elementLocator.click({ timeout: 5000 });
+        await elementLocator.click({ timeout: 5000, force: true });
         break;
       case 'hover':
         await elementLocator.scrollIntoViewIfNeeded({ timeout: 3000 });

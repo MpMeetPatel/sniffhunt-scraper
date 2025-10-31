@@ -230,43 +230,6 @@ async function processBeastMode(context, outputHtmlFilename, userQuery, url) {
           }
         });
 
-        const allElements = clonedPage.querySelectorAll('*');
-
-        allElements.forEach((element, index) => {
-          try {
-            if (
-              element.tagName === 'IFRAME' ||
-              element.tagName === 'CODE' ||
-              element.tagName === 'PRE'
-            ) {
-              return;
-            }
-
-            if (element.tagName !== 'TABLE' && !element.closest('table')) {
-              const attrs = Array.from(element.attributes);
-              attrs.forEach(attr => {
-                try {
-                  if (
-                    attr.name !== 'class' &&
-                    attr.name !== 'id' &&
-                    !attr.name.startsWith('data-') &&
-                    !attr.name.startsWith('aria-')
-                  ) {
-                    element.removeAttribute(attr.name);
-                  }
-                } catch (attrError) {
-                  console.warn(
-                    `Failed to remove attribute ${attr.name}:`,
-                    attrError
-                  );
-                }
-              });
-            }
-          } catch (elementError) {
-            console.warn(`Failed to process element ${index}:`, elementError);
-          }
-        });
-
         // Generate the final HTML
         let result;
         if (clonedPage.outerHTML) {

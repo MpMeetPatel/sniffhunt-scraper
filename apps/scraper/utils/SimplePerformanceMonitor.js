@@ -115,7 +115,7 @@ export class SimplePerformanceMonitor {
       );
       const totalPeak =
         this.metrics.peakMemory + this.metrics.browserPeakMemory;
-      console.log(`   🔥 Combined Peak: ${totalPeak}MB (Node.js + Browser)`);
+      console.log(`   🔥 Combined Peak: ${totalPeak}MB (Bun.js + Browser)`);
     }
 
     if (this.phases.length > 0) {
