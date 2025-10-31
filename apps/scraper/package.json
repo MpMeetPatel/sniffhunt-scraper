@@ -11,8 +11,8 @@
     "cli": "bun cli.js"
   },
   "dependencies": {
-    "@ai-sdk/google": "^1.2.22",
-    "ai": "^4.3.19",
+    "@ai-sdk/google": "^2.0.0",
+    "ai": "^5.0.0",
     "dotenv": "^17.2.1",
     "fingerprint-injector": "^2.1.70",
     "html-entities": "^2.6.0",
@@ -27,6 +27,6 @@
     "remark-stringify": "^11.0.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0",
-    "zod": "^3.25.76"
+    "zod": "^3.23.8"
   }
 }

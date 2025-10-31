@@ -13,6 +13,8 @@
     "dev:server": "cd apps/server && bun --watch src/index.ts",
     "cli:scraper": "cd apps/scraper && bun cli.js",
     "setup:mcp": "cd apps/mcp && bun run setup",
+    "clean-all": "rm -rf node_modules && rm -rf apps/scraper/node_modules && rm -rf apps/mcp/node_modules && rm -rf apps/server/node_modules && rm -rf apps/web/node_modules",
+    "install-all": "bun install && bun install --filter 'apps/*'",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -31,11 +33,12 @@
   },
   "packageManager": "bun@1.2.15",
   "dependencies": {
-    "@types/mdx": "^2.0.13"
+    "@ai-sdk/google": "2.0.0",
+    "@types/mdx": "^2.0.13",
+    "ai": "5.0.0"
   },
   "overrides": {
-    "zod": "^3.25.76",
-    "ai": "^4.3.19",
-    "@ai-sdk/google": "^1.2.22"
+    "ai": "^5.0.0",
+    "@ai-sdk/google": "^2.0.0"
   }
 }
