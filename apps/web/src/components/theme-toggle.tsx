@@ -1,12 +1,20 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
 type Theme = 'light' | 'dark';
 
-function getInitialTheme(): Theme {
-  if (typeof document === 'undefined') return 'light';
-  const hasClass = document.documentElement.classList.contains('dark');
-  return hasClass ? 'dark' : 'light';
+const FALLBACK_THEME: Theme = 'dark';
+
+function resolveEnvironmentTheme(mediaQuery: MediaQueryList | null): Theme {
+  if (typeof document !== 'undefined') {
+    if (document.documentElement.classList.contains('dark')) {
+      return 'dark';
+    }
+  }
+  if (mediaQuery?.matches) {
+    return 'dark';
+  }
+  return 'light';
 }
 
 function applyTheme(theme: Theme) {
@@ -15,80 +23,87 @@ function applyTheme(theme: Theme) {
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+  const [theme, setTheme] = useState<Theme>(FALLBACK_THEME);
+  const [hydrated, setHydrated] = useState(false);
+  const hasStoredPreference = useRef(false);
 
-  // Ensure state matches current DOM theme before paint to avoid icon mismatch
-  useLayoutEffect(() => {
-    const current: Theme = document.documentElement.classList.contains('dark')
-      ? 'dark'
-      : 'light';
-    setTheme(current);
-  }, []);
-
-  // Listen for system changes only if user hasn't explicitly chosen
   const mediaQuery = useMemo(() => {
     if (typeof window === 'undefined') return null;
     return window.matchMedia('(prefers-color-scheme: dark)');
   }, []);
 
   useEffect(() => {
-    // If there is a stored preference, honor it; otherwise keep current
-    try {
-      const stored = localStorage.getItem('theme') as Theme | null;
-      if (stored === 'light' || stored === 'dark') {
-        setTheme(stored);
-        applyTheme(stored);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
+    if (typeof window === 'undefined') return;
 
-  // Persist and apply when theme changes
-  useEffect(() => {
-    applyTheme(theme);
-    try {
-      localStorage.setItem('theme', theme);
-    } catch {
-      // ignore
-    }
-  }, [theme]);
-
-  // If user clears preference, follow system changes (not exposed in UI now but keep future-proof)
-  useEffect(() => {
-    if (!mediaQuery) return;
-    const handler = () => {
+    const stored = (() => {
       try {
-        const stored = localStorage.getItem('theme');
-        if (stored !== 'light' && stored !== 'dark') {
-          const next: Theme = mediaQuery.matches ? 'dark' : 'light';
-          setTheme(next);
+        const value = window.localStorage.getItem('theme') as Theme | null;
+        if (value === 'light' || value === 'dark') {
+          return value;
         }
       } catch {
-        // ignore
+        // ignore storage access issues
       }
+      return null;
+    })();
+
+    const nextTheme = stored ?? resolveEnvironmentTheme(mediaQuery);
+    hasStoredPreference.current = Boolean(stored);
+
+    setTheme(nextTheme);
+    setHydrated(true);
+  }, [mediaQuery]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    applyTheme(theme);
+    try {
+      window.localStorage.setItem('theme', theme);
+    } catch {
+      // ignore persistence failures
+    }
+  }, [theme, hydrated]);
+
+  useEffect(() => {
+    if (!mediaQuery) return;
+    const handler = (event: MediaQueryListEvent) => {
+      if (hasStoredPreference.current) return;
+      setTheme(event.matches ? 'dark' : 'light');
     };
-    mediaQuery.addEventListener?.('change', handler as EventListener);
-    return () =>
-      mediaQuery.removeEventListener?.('change', handler as EventListener);
+    mediaQuery.addEventListener?.('change', handler);
+    return () => mediaQuery.removeEventListener?.('change', handler);
   }, [mediaQuery]);
 
   const isDark = theme === 'dark';
+  const buttonLabel = hydrated
+    ? isDark
+      ? 'Switch to light mode'
+      : 'Switch to dark mode'
+    : 'Toggle theme';
+  const sunClass = `h-4 w-4 transition-transform ${
+    hydrated && isDark ? 'scale-0 -rotate-90' : 'scale-100 rotate-0'
+  }`;
+  const moonClass = `h-4 w-4 absolute transition-transform ${
+    hydrated && isDark ? 'scale-100 rotate-0' : 'scale-0  rotate-90'
+  }`;
 
   return (
     <button
       type="button"
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      aria-label={buttonLabel}
+      title={buttonLabel}
+      onClick={() => {
+        if (!hydrated) return;
+        setTheme(prev => {
+          const next = prev === 'dark' ? 'light' : 'dark';
+          hasStoredPreference.current = true;
+          return next;
+        });
+      }}
       className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none"
     >
-      <Sun
-        className={`h-4 w-4 transition-transform ${isDark ? 'scale-0 -rotate-90' : 'scale-100 rotate-0'}`}
-      />
-      <Moon
-        className={`h-4 w-4 absolute transition-transform ${isDark ? 'scale-100 rotate-0' : 'scale-0  rotate-90'}`}
-      />
+      <Sun className={sunClass} />
+      <Moon className={moonClass} />
     </button>
   );
 }

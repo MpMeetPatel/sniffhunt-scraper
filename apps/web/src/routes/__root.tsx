@@ -46,7 +46,7 @@ function RootDocument() {
   const isFetching = useRouterState({ select: s => s.isLoading });
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           id="theme-init"
