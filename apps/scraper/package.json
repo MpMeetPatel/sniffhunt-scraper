@@ -13,10 +13,10 @@
   "dependencies": {
     "@ai-sdk/google": "^2.0.0",
     "ai": "^5.0.0",
-    "dotenv": "^17.2.1",
-    "fingerprint-injector": "^2.1.70",
+    "dotenv": "^17.2.3",
+    "fingerprint-injector": "^2.1.75",
     "html-entities": "^2.6.0",
-    "playwright-core": "^1.55.0",
+    "playwright-core": "^1.56.1",
     "rehype-format": "^5.0.1",
     "rehype-highlight": "^7.0.2",
     "rehype-parse": "^9.0.1",
