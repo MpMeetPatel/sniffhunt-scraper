@@ -1,6 +1,9 @@
 <div align="center">
 
-# 🚀 SniffHunt Scraper
+# 🚀 SniffHunt Scraper 
+### (SOON LAUCHING BETTER COMPLETE REWRITTEN VERSION SOON)
+
+<br/>
 <img src="./assets/logo.png" alt="SniffHunt Logo" width="200px">
 
 
